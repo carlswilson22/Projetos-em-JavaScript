@@ -1,5 +1,7 @@
-<title>Projetos em JavaScript</title>
+<h1>Projetos em JavScript</h1>
 
-<h1>Projeto de adivinhação de numero secreto primeira parte</h1>
+<h1>Projeto versão 1</h1>
+<p1>Projeto de site de adivinhação de numero secreto</p1>
 
-<h1>Projeto de adivinhação de numero secreto segunda parte</h1>
+<h1>Projeto versão 2</h1>
+<p1>Aprimoramento do projeto de adinhação</p1>
