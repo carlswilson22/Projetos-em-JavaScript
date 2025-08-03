@@ -14,19 +14,14 @@ if (chute == numeroSecreto) {
 break;
 } else {
 if (chute > numeroSecreto) {
-alert(O numero secreto é menor que ${chute});
+alert(`O numero secreto é menor que ${chute}`);
 } else {
-alert(O numero secreto é maior que ${chute});
+alert(`O numero secreto é maior que ${chute}`);
 }
 //Tentativas = Tentativas + 1;
 tentativas++;
 }
 }
 let palavraTentativa = tentativas > 1 ? "tentativas" : "tentativa";
-alert(Nice voce acertou o numero secreto ${numeroSecreto} com ${tentativas} ${palavraTentativa}.);
+alert(`Boa voce acertou o numero secreto ${numeroSecreto} com ${tentativas} ${palavraTentativa}.`);
 
-//if (Tentativas > 1) {
-//alert(Nice voce acertou o numero secreto ${numeroSecreto} com ${tentativas} tentativas.);
-//} else {
-// alert(Nice voce acertou o numero secreto ${numeroSecreto} com ${tentativas} tentativa.);
-//}
