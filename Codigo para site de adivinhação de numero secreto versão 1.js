@@ -1,5 +1,5 @@
 alert("Boas vindas ao site do numero secreto");
-let numeroSecreto = parseInt(Math.random() * 100 + 1) ;
+let numeroSecreto = parseInt(Math.random() * 10 + 1) ;
 console.log(numeroSecreto);
 let chute;
 let tentativas = 1;
