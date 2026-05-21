@@ -11,15 +11,18 @@ model User {
   id           String        @id @default(uuid())
   email        String        @unique
   passwordHash String
+  name         String        @default("")
+  avatar       String?
   categories   Category[]
   transactions Transaction[]
+  goals        Goal[]
 }
 
 model Category {
   id           String        @id @default(uuid())
   name         String
   userId       String
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
 }
 
@@ -30,7 +33,17 @@ model Transaction {
   date        DateTime
   type        Int      
   categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Goal {
+  id        String   @id @default(uuid())
+  title     String
+  target    Float
+  current   Float    @default(0)
+  deadline  DateTime?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

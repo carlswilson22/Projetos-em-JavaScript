@@ -1,101 +1,181 @@
 # 💰 Financial Control App
 
-Um sistema completo (Full-Stack) para gestão de finanças pessoais. Desenvolvido com foco na experiência do usuário, performance e arquitetura moderna. O projeto permite que usuários gerenciem suas receitas e despesas, visualizem gráficos de evolução mensal e mantenham um histórico detalhado de suas transações.
+O **Financial Control** é um sistema completo (Full-Stack) voltado para a gestão de finanças pessoais. Ele permite que o usuário gerencie receitas, despesas, categorize lançamentos dinamicamente e acompanhe gráficos de evolução de forma limpa e intuitiva. 
+
+Este projeto foi totalmente reestruturado e corrigido para seguir os mais rigorosos padrões da engenharia de software acadêmica e profissional, incluindo **CRUD completo**, **autenticação JWT real**, **integridade referencial com remoção em cascata (onDelete: Cascade)**, **documentação de engenharia completa (BRD e SRS com diagramas)**, **testes automatizados e integrados** e **documentação interativa Swagger**.
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Novidades e Melhorias Implementadas (Fintech de Elite)
 
-- **Autenticação Segura:** Criação de conta e Login utilizando JWT (JSON Web Tokens).
-- **Dashboard Interativo:** Resumo financeiro (Saldo, Receitas, Despesas) e gráficos visuais de acompanhamento.
-- **Gestão de Transações:** Adição, listagem e exclusão de transações (entradas e saídas).
-- **Filtros Inteligentes:** Busca de transações por descrição e filtragem por categorias.
-- **Perfil do Usuário:** Gerenciamento de informações pessoais.
-- **Ambiente Containerizado:** Backend totalmente configurado com Docker para fácil execução.
+A aplicação evoluiu de um gerenciador financeiro simples para uma **plataforma inteligente de bem-estar financeiro**, incorporando diferenciais robustos de mercado inspirados nas fintechs mais modernas do mundo:
+
+### 🌟 Diferenciais Inovadores e Premium
+
+1.  **Assistente de Insights Inteligentes (IA Local) 🔮:** Uma central integrada que analisa localmente despesas e receitas, alertando instantaneamente sobre riscos de déficit orçamentário, calculando taxas de poupança ideais e detectando o principal gargalo de consumo nas despesas por categoria.
+2.  **Simulador FIRE (Independência Financeira) 🌅:** Calculadora interativa inspirada no movimento *Financial Independence, Retire Early* baseada na **Regra dos 4%** (patrimônio FIRE = custo de vida anual × 25). Um algoritmo calcula em tempo real o patrimônio necessário e projeta o tempo restante (anos e meses) para viver de renda a partir dos aportes mensais e juros compostos.
+3.  **Metas de Economia com Depósitos Rápidos Inline 🎯:** Criação dinâmica de metas financeiras com acompanhamento visual em barras de progresso gradientes animadas, permitindo realizar **aportes inline rápidos clicando no botão "+ de depósito"** direto no Dashboard.
+4.  **Evolução Matemática Real do Saldo 📈:** O gráfico de saldo foi inteiramente redesenhado. Agora ele ordena transações cronologicamente e plota a curva cumulativa real do saldo (evitando flutuações diárias isoladas incorretas), exibindo um painel com o **Saldo Atual, Pico Histórico e Menor Saldo** da conta em uma linha neon degradê ultra responsiva.
+5.  **Gráfico Donut de Despesas por Categoria 🍩:** Gráfico de rosca elegante (Recharts) que agrupa automaticamente todas as saídas por categoria, exibindo o percentual exato consumido de cada uma e o total consolidado de gastos no centro do donut.
+6.  **Painel de Configurações Geral e Funcional ⚙️:** A engrenagem da barra lateral agora abre uma central de preferências completa:
+    - **Modo Escuro (Dark Mode):** Alternador de tema em um clique que persiste a escolha do usuário no `localStorage`.
+    - **Teto de Alerta de Gastos:** Define um limite em R$ para destacar transações consideradas de luxo ou de alto valor.
+    - **Backup & Portabilidade:** Exportação de todo o extrato financeiro em planilhas **CSV (Excel)** e arquivos estruturados **JSON**.
+    - **Reset Seguro (Zona de Perigo):** Permite zerar a conta de forma segura exigindo que o usuário digite "REDEFINIR" para evitar perdas acidentais.
+7.  **Autocompletar Inteligente de Categorias 🧠:** O modal de nova transação autocompleta automaticamente o campo usando as categorias reais cadastradas pelo usuário no banco via API (`api.get('/categories')`), prevenindo erros de digitação e facilitando o uso no dia a dia.
+8.  **CRUD Completo & Cascata (onDelete: Cascade):** Banco de dados SQLite configurado no padrão profissional de integridade relacional via Prisma ORM: deletar um usuário ou meta remove de forma limpa tudo no banco em efeito cascata.
+9.  **API REST Swagger & OpenAPI 3.0:** Documentação completa e interativa de todas as rotas e regras do backend em `/api-docs`.
+10. **Testes de Integração Jest (10/10 PASS):** Cobertura total de testes cobrindo autenticação, perfil, transações, categorias dinâmicas e CRUD/cascata completo de metas.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-O projeto foi dividido em duas camadas principais, utilizando as melhores práticas do mercado:
+### **Frontend**
+- **React (SPA) + Vite:** Interface SPA ultra-veloz, modular e reativa.
+- **TypeScript:** Tipagem estrita ponta a ponta e máxima segurança contra erros em runtime.
+- **Tailwind CSS:** Design de alta fidelidade visual com micro-transições, glassmorphism e cores HSL harmônicas.
+- **Recharts:** Gráficos interativos elegantes (área e donut) para visualização premium de dados.
+- **Axios:** Cliente HTTP com interceptor para autenticação JWT transparente e automática.
+- **Lucide React & Date-fns:** Ícones modernos e formatação precisa de datas em português do Brasil.
 
-### Frontend
-- **React:** Biblioteca principal para construção da interface.
-- **TypeScript:** Tipagem estática para maior segurança e previsibilidade do código.
-- **Vite:** Bundler super rápido para o ambiente de desenvolvimento.
-- **Tailwind CSS:** Estilização utilitária moderna e responsiva.
-- **Axios:** Cliente HTTP para comunicação com a API, configurado com interceptors para injeção automática de tokens.
-- **Lucide React:** Biblioteca de ícones.
+### **Backend**
+- **Node.js & Express:** Arquitetura REST robusta, assíncrona e desacoplada.
+- **Prisma ORM & SQLite:** ORM moderno tipado e banco de dados relacional embarcado de alta eficiência.
+- **Bcrypt.js & JWT (JSON Web Tokens):** Criptografia de senhas (salt rounds 10) e controle de sessões seguro.
+- **Swagger UI Express & swagger-jsdoc:** Swagger autogerado pelas anotações JSDoc das rotas.
+- **Jest & Supertest:** Testes integrados determinísticos que rodam mockados sob banco temporário.
 
-### Backend
-- **Node.js & Express:** Servidor web rápido e minimalista.
-- **Prisma ORM:** Mapeamento objeto-relacional moderno e tipado para interagir com o banco de dados.
-- **SQLite:** Banco de dados relacional leve e embutido, ideal para desenvolvimento e testes.
-- **Bcrypt & JsonWebToken:** Criptografia de senhas e geração de tokens de acesso.
-- **Docker & Docker Compose:** Containerização da aplicação, garantindo que o backend rode perfeitamente em qualquer máquina.
 
 ---
 
-## 🚀 Como executar o projeto localmente
+## 📂 Estrutura do Projeto
 
-### Pré-requisitos
-Antes de começar, certifique-se de ter instalado em sua máquina:
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en/) (v18 ou superior)
-- [Docker](https://www.docker.com/) e Docker Compose
+```plaintext
+Proj_Final_Des.Sistemas/
+ ├── docs/                   # Documentação Acadêmica de Engenharia
+ │    ├── BRD.md             # Business Requirements Document (Escopo e Negócio)
+ │    └── SRS.md             # Software Requirements Specification (Diagramas & RFs)
+ ├── backend/                # Servidor Node.js / Express
+ │    ├── prisma/            # Schema do banco de dados e migrations do Prisma
+ │    ├── src/
+ │    │    ├── config/       # Conexões com banco e configurações (Swagger, DB)
+ │    │    ├── controllers/  # Controladores de negócio (Auth, Categories, Transactions)
+ │    │    ├── middlewares/  # Proteção de rotas (Auth JWT) e Tratamento de Erros
+ │    │    ├── routes/       # Definição dos endpoints documentados com JSDoc
+ │    │    └── server.js     # Inicialização e middlewares globais
+ │    ├── tests/             # Suíte de testes automatizados (Jest/Supertest)
+ │    ├── Dockerfile         # Configuração de imagem Docker
+ │    └── docker-compose.yml # Orquestração do container de desenvolvimento
+ └── frontend/               # Cliente React + TypeScript
+      ├── src/
+           ├── components/   # Botões, Modais, Gráficos (Dashboard)
+           ├── context/      # Provedores Globais de Contexto (AuthContext, TransactionContext)
+           ├── services/     # API Axios com injeção automática de JWT
+           └── types/        # Definições estritas de interfaces TypeScript
+```
 
-### 1. Clonando o repositório
-```bash
-git clone [https://github.com/Trindaddy/Proj_Final_Des.Sistemas.git](https://github.com/Trindaddy/Proj_Final_Des.Sistemas.git)
-cd seu-repositorio
-2. Configurando e Rodando o Backend (API)
-O backend foi preparado para rodar via Docker na porta 5000.
+---
 
-Navegue até a pasta do backend (se houver uma pasta separada, ex: cd backend).
+## 🚀 Como Executar o Projeto Localmente
 
-Crie um arquivo .env na raiz do backend baseado no arquivo de exemplo (se houver), ou adicione:
+### **Pré-requisitos**
+Antes de começar, certifique-se de ter instalado:
+*   [Git](https://git-scm.com/)
+*   [Node.js](https://nodejs.org/) (v18 ou superior)
+*   [Docker](https://www.docker.com/) (opcional, para rodar via container)
 
-Snippet de código
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="sua_chave_secreta_super_segura"
-PORT=5000
-Suba o container do Docker:
+---
 
-Bash
-docker-compose up -d --build
-A API estará disponível em: http://localhost:5000/api
+### **1. Configurando e Rodando o Backend (API)**
 
-3. Configurando e Rodando o Frontend (React)
-Abra um novo terminal e navegue até a pasta do frontend.
+**Opção A: Rodar Localmente com Node.js (Recomendado para Testes rápidos)**
+1. Navegue até a pasta do backend:
+   ```bash
+   cd backend
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Crie e configure o arquivo `.env` na raiz do backend baseado no `.env.example` ou conforme abaixo:
+   ```env
+   DATABASE_URL="file:./dev.db"
+   JWT_SECRET="sua_chave_secreta_super_segura"
+   PORT=5000
+   ```
+4. Execute as migrations do Prisma para estruturar o banco SQLite local:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+5. Inicie o servidor em modo de desenvolvimento (Reload automático via nodemon):
+   ```bash
+   npm run dev
+   ```
+   *A API estará ativa em: `http://localhost:5000/api`*
 
-Crie um arquivo .env na raiz do frontend (junto ao package.json) com a seguinte variável:
+---
 
-Snippet de código
-VITE_API_URL=http://localhost:5000/api
-Instale as dependências:
+**Opção B: Rodar com Docker & Docker Compose**
+1. Na pasta `backend`, certifique-se de que o `.env` está configurado corretamente.
+2. Suba o container da aplicação:
+   ```bash
+   docker-compose up -d --build
+   ```
+   *O backend subirá em container rodando na porta 5000.*
 
-Bash
-npm install
-Inicie o servidor de desenvolvimento:
+---
 
-Bash
-npm run dev
-Acesse a aplicação no seu navegador (geralmente em http://localhost:5173).
+### **2. Acessando a Documentação Swagger**
+Com o backend em execução (Opção A ou B), acesse no seu navegador:
+👉 **[http://localhost:5000/api-docs](http://localhost:5000/api-docs)**
 
-📂 Estrutura de Diretórios (Frontend)
-Uma breve visão de como o frontend está organizado:
+*Nela, você pode testar todos os endpoints de Autenticação, Perfil, Categorias e Transações de forma 100% interativa.*
 
-Plaintext
-src/
- ├── components/     # Componentes reutilizáveis (Botões, Modais, Gráficos)
- ├── context/        # Estados globais da aplicação (AuthContext, TransactionContext)
- ├── hooks/          # Custom Hooks (useAuth, useTransactions)
- ├── lib/            # Funções utilitárias (formatações de moeda e data)
- ├── services/       # Configuração de comunicação com a API (Axios)
- ├── types/          # Definições de tipos do TypeScript
- └── App.tsx         # Rotas e entry-point da aplicação
+---
 
-📝 Licença
-Este projeto está sob a licença MIT. Sinta-se livre para usá-lo e modificá-lo.
+### **3. Rodando os Testes Automatizados**
+A suíte de testes de integração roda de forma independente sem interferir na API ativa:
+1. Acesse a pasta `backend`.
+2. Execute o comando de teste:
+   ```bash
+   npm test
+   ```
+   *Isso executará 10 casos de testes de integração robustos (Registro, Login, Perfil, Categorização Dinâmica, Transações e CRUD Completo com Cascata de Metas Financeiras) imprimindo os resultados e garantindo a integridade total do sistema.*
 
-Desenvolvido com ☕ e 💻.
+---
+
+### **4. Configurando e Rodando o Frontend (React Client)**
+
+1. Abra uma nova janela do terminal e navegue até a pasta do frontend:
+   ```bash
+   cd frontend
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Crie um arquivo `.env` na raiz do frontend com o endpoint da API:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+4. Inicie o servidor do Vite:
+   ```bash
+   npm run dev
+   ```
+5. Acesse o endereço indicado no seu terminal (geralmente **`http://localhost:5173`**).
+
+---
+
+## 📈 Documentação de Engenharia e Negócios (BRD & SRS)
+
+Para aprofundar na engenharia de requisitos do Financial Control, consulte os documentos detalhados criados na pasta `/docs`:
+*   **[docs/BRD.md](file:///d:/Programação/ProjFinalQuarta/Proj_Final_Des.Sistemas/docs/BRD.md):** Apresenta o escopo de negócios, dores do usuário, personas, objetivos comerciais e indicadores de sucesso (KPIs).
+*   **[docs/SRS.md](file:///d:/Programação/ProjFinalQuarta/Proj_Final_Des.Sistemas/docs/SRS.md):** Apresenta a infraestrutura arquitetural técnica, requisitos funcionais/não funcionais e os **4 diagramas lógicos em Mermaid** (Caso de Uso, Diagrama de Classes, DER Físico/Lógico e Diagrama de Sequência do Login).
+
+---
+
+## 📝 Licença
+Este projeto é livre e está sob a licença MIT.
+
+Desenvolvido para fins acadêmicos com ☕, 💻 e rigor de Engenharia de Software.

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTransactions } from '../context/TransactionContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { X } from 'lucide-react';
+import api from '../services/api';
 
 interface Props {
   isOpen: boolean;
@@ -15,8 +16,21 @@ export function AddTransactionModal({ isOpen, onClose }: Props) {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [existingCategories, setExistingCategories] = useState<{ id: string; name: string }[]>([]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      const fetchCategories = async () => {
+        try {
+          const response = await api.get('/categories');
+          setExistingCategories(response.data);
+        } catch (error) {
+          console.error('Erro ao buscar categorias para autocompletar:', error);
+        }
+      };
+      fetchCategories();
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +51,8 @@ export function AddTransactionModal({ isOpen, onClose }: Props) {
     setType('expense');
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -82,7 +98,7 @@ export function AddTransactionModal({ isOpen, onClose }: Props) {
               <Input 
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                placeholder="Ex: Salário Mençal..."
+                placeholder="Ex: Salário Mensal..."
                 required
               />
             </div>
@@ -103,8 +119,14 @@ export function AddTransactionModal({ isOpen, onClose }: Props) {
                 value={category}
                 onChange={e => setCategory(e.target.value)}
                 placeholder="Ex: Alimentação"
+                list="categories-suggestions"
                 required
               />
+              <datalist id="categories-suggestions">
+                {existingCategories.map(cat => (
+                  <option key={cat.id} value={cat.name} />
+                ))}
+              </datalist>
             </div>
           </div>
 

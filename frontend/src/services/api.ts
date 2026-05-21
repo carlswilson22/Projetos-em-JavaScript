@@ -8,7 +8,7 @@ const api = axios.create({
 // Este "Intermediário" pega o Token do navegador e anexa em TODAS as requisições automaticamente!
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
-    if (token) {
+    if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

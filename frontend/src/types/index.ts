@@ -14,3 +14,13 @@ export interface SummaryData {
   totalIncome: number;
   totalExpense: number;
 }
+
+export interface Goal {
+  id: string;
+  title: string;
+  target: number;
+  current: number;
+  deadline?: string; // ISO format
+  userId: string;
+}
+

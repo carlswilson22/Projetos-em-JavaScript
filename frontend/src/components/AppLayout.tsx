@@ -14,10 +14,16 @@ export const AppLayout = () => {
         <div className="flex flex-col items-center gap-8 w-full">
           <NavLink 
             to="/profile"
-            className={({ isActive }) => `w-10 h-10 rounded-2xl flex items-center justify-center font-bold font-sans text-lg cursor-pointer flex-shrink-0 transition-colors ${isActive ? 'bg-primary text-primary-foreground' : 'bg-foreground text-background hover:bg-foreground/90'}`}
+            className={({ isActive }) => `w-10 h-10 rounded-2xl flex items-center justify-center font-bold font-sans text-lg cursor-pointer flex-shrink-0 transition-all duration-300 overflow-hidden ${isActive ? 'ring-2 ring-foreground ring-offset-2' : 'hover:scale-105'}`}
             title="Perfil"
           >
-            {initial}
+            {user?.avatar ? (
+              <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-foreground text-background flex items-center justify-center font-bold">
+                {initial}
+              </div>
+            )}
           </NavLink>
           
           <div className="flex flex-col gap-6 w-full items-center">
@@ -41,12 +47,16 @@ export const AppLayout = () => {
         </div>
         
         <div className="flex flex-col gap-6 text-muted-foreground items-center">
-          <button className="p-3 hover:bg-muted/50 hover:text-foreground rounded-2xl transition-colors">
+          <button className="p-3 hover:bg-muted/50 hover:text-foreground rounded-2xl transition-colors" title="Ajuda">
             <HelpCircle className="w-5 h-5" />
           </button>
-          <button className="p-3 hover:bg-muted/50 hover:text-foreground rounded-2xl transition-colors">
+          <NavLink 
+            to="/settings"
+            className={({ isActive }) => `p-3 rounded-2xl transition-colors ${isActive ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
+            title="Configurações"
+          >
             <Settings className="w-5 h-5" />
-          </button>
+          </NavLink>
         </div>
       </nav>
 

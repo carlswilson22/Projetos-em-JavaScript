@@ -61,17 +61,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticated(false);
   };
 
-  const updateProfile = async (data: Partial<User>) => {
+  const updateProfile = async (data: Partial<User>): Promise<void> => {
     if (!user) return;
     try {
-      // Exemplo de como seria a chamada real para atualizar (ajuste a rota se necessário)
-      // const response = await api.put(`/users/${user.id}`, data);
+      // Chamada real para a API no backend
+      const response = await api.put('/auth/profile', data);
       
-      const updatedUser = { ...user, ...data };
+      const updatedUser = { ...user, ...response.data.user };
       localStorage.setItem('@FinanceApp:user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-    } catch (error) {
-      console.error("Erro ao atualizar perfil", error);
+    } catch (error: any) {
+      const message = error.response?.data?.error || 'Erro ao atualizar perfil.';
+      throw new Error(message);
     }
   };
 

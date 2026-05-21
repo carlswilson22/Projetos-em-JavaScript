@@ -47,7 +47,7 @@ export function History() {
            </div>
         ) : (
           filteredTransactions.map((transaction) => {
-            const isIncome = transaction.type === 1;
+            const isIncome = transaction.type === 'income';
             return (
               <div 
                 key={transaction.id} 
