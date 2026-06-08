@@ -2,28 +2,33 @@ const prisma = require('../config/db');
 
 const createTransaction = async (req, res) => {
     try {
-        const { amount, description, date, type, categoryId } = req.body;
+        const { amount, description, date, type, category, categoryId, currency, exchangeRate } = req.body;
         const userId = req.user.userId;
+        const categoryInput = category || categoryId;
 
-        // Se categoryId não for um UUID, tratamos como nome de categoria
-        let category;
-        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryId);
+        if (!categoryInput) {
+            return res.status(400).json({ error: 'A categoria é obrigatória.' });
+        }
+
+        // Se categoryInput não for um UUID, tratamos como nome de categoria
+        let dbCategory;
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryInput);
 
         if (isUUID) {
-            category = await prisma.category.findFirst({
-                where: { id: categoryId, userId }
+            dbCategory = await prisma.category.findFirst({
+                where: { id: categoryInput, userId }
             });
         } else {
-            category = await prisma.category.findFirst({
-                where: { name: categoryId, userId }
+            dbCategory = await prisma.category.findFirst({
+                where: { name: categoryInput, userId }
             });
         }
 
         // Se não existir, criamos a categoria dinamicamente
-        if (!category) {
-            category = await prisma.category.create({
+        if (!dbCategory) {
+            dbCategory = await prisma.category.create({
                 data: {
-                    name: categoryId,
+                    name: categoryInput,
                     userId
                 }
             });
@@ -35,8 +40,10 @@ const createTransaction = async (req, res) => {
                 description,
                 date: new Date(date),
                 type,
-                categoryId: category.id,
-                userId
+                categoryId: dbCategory.id,
+                userId,
+                currency: currency || undefined,
+                exchangeRate: exchangeRate !== undefined ? Number(exchangeRate) : undefined
             },
             include: { category: true }
         });
@@ -64,8 +71,9 @@ const getTransactions = async (req, res) => {
 const updateTransaction = async (req, res) => {
     try {
         const { id } = req.params;
-        const { amount, description, date, type, categoryId } = req.body;
+        const { amount, description, date, type, category, categoryId, currency, exchangeRate } = req.body;
         const userId = req.user.userId;
+        const categoryInput = category || categoryId;
 
         const transactionExists = await prisma.transaction.findFirst({
             where: { id, userId }
@@ -77,29 +85,29 @@ const updateTransaction = async (req, res) => {
 
         let actualCategoryId = transactionExists.categoryId;
 
-        if (categoryId) {
-            let category;
-            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryId);
+        if (categoryInput) {
+            let dbCategory;
+            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryInput);
 
             if (isUUID) {
-                category = await prisma.category.findFirst({
-                    where: { id: categoryId, userId }
+                dbCategory = await prisma.category.findFirst({
+                    where: { id: categoryInput, userId }
                 });
             } else {
-                category = await prisma.category.findFirst({
-                    where: { name: categoryId, userId }
+                dbCategory = await prisma.category.findFirst({
+                    where: { name: categoryInput, userId }
                 });
             }
 
-            if (!category) {
-                category = await prisma.category.create({
+            if (!dbCategory) {
+                dbCategory = await prisma.category.create({
                     data: {
-                        name: categoryId,
+                        name: categoryInput,
                         userId
                     }
                 });
             }
-            actualCategoryId = category.id;
+            actualCategoryId = dbCategory.id;
         }
 
         const updatedTransaction = await prisma.transaction.update({
@@ -109,7 +117,9 @@ const updateTransaction = async (req, res) => {
                 description: description !== undefined ? description : undefined,
                 date: date ? new Date(date) : undefined,
                 type: type !== undefined ? type : undefined,
-                categoryId: actualCategoryId
+                categoryId: actualCategoryId,
+                currency: currency !== undefined ? currency : undefined,
+                exchangeRate: exchangeRate !== undefined ? Number(exchangeRate) : undefined
             },
             include: { category: true }
         });

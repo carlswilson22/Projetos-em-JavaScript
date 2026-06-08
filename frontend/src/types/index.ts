@@ -7,6 +7,8 @@ export interface Transaction {
   category: string;
   date: string; // ISO format
   type: TransactionType;
+  currency?: string;
+  exchangeRate?: number;
 }
 
 export interface SummaryData {

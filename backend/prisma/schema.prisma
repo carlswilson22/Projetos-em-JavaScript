@@ -21,6 +21,7 @@ model User {
 model Category {
   id           String        @id @default(uuid())
   name         String
+  budget       Float?
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
@@ -36,6 +37,8 @@ model Transaction {
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency    String   @default("BRL")
+  exchangeRate Float   @default(1.0)
 }
 
 model Goal {

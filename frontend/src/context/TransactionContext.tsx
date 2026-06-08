@@ -30,7 +30,9 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         amount: t.amount,
         date: t.date,
         type: t.type === 1 ? 'income' : 'expense', 
-        category: t.category?.name || 'Geral' 
+        category: t.category?.name || 'Geral',
+        currency: t.currency,
+        exchangeRate: t.exchangeRate
       }));
 
       setTransactions(formattedTransactions);
@@ -55,8 +57,9 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         amount: data.amount,
         date: data.date,
         type: data.type === 'income' ? 1 : 0,
-        // Lembre-se: O backend precisa de um ID real aqui, não a string "Salário" ou "Alimentação".
-        categoryId: data.category 
+        category: data.category,
+        currency: data.currency,
+        exchangeRate: data.exchangeRate
       };
 
       await api.post('/transactions', backendPayload);

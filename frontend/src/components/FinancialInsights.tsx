@@ -107,12 +107,12 @@ export const FinancialInsights: React.FC = () => {
         {insights.map((insight, index) => (
           <div
             key={index}
-            className={`flex gap-3.5 p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] bg-white ${
+            className={`flex gap-3.5 p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] bg-card ${
               insight.type === 'warning'
-                ? 'border-red-100 hover:border-red-200/80 shadow-red-50/10'
+                ? 'border-destructive/20 hover:border-destructive/30 shadow-sm'
                 : insight.type === 'success'
-                ? 'border-emerald-100 hover:border-emerald-200/80 shadow-emerald-50/10'
-                : 'border-border hover:border-foreground/10'
+                ? 'border-success/20 hover:border-success/30 shadow-sm'
+                : 'border-border hover:border-primary/10 shadow-sm'
             }`}
           >
             <div className="flex-shrink-0 mt-0.5">{insight.icon}</div>

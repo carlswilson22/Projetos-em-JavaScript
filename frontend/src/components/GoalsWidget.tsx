@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, CheckCircle2, Calendar, PiggyBank } from 'lucide-react';
+import { Plus, Trash2, CheckCircle2, Calendar, PiggyBank, X } from 'lucide-react';
 import api from '../services/api';
 import { Goal } from '../types';
 import { Button } from './ui/button';
+import { ConfirmDialog } from './ui/ConfirmDialog';
+import { useToast } from '../context/ToastContext';
+import { formatCurrency } from '../lib/format';
 
 export const GoalsWidget: React.FC = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { addToast } = useToast();
   
   // Estados para Criação
   const [isAdding, setIsAdding] = useState(false);
@@ -18,6 +22,9 @@ export const GoalsWidget: React.FC = () => {
   // Estados para Depósito Inline
   const [depositGoalId, setDepositGoalId] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useState('');
+
+  // Estado para exclusão
+  const [goalToDelete, setGoalToDelete] = useState<string | null>(null);
 
   const fetchGoals = async () => {
     setIsLoading(true);
@@ -47,6 +54,8 @@ export const GoalsWidget: React.FC = () => {
         deadline: deadline || undefined,
       });
 
+      addToast('Meta de economia criada com sucesso!', 'success');
+
       // Limpar formulário
       setTitle('');
       setTarget('');
@@ -57,7 +66,7 @@ export const GoalsWidget: React.FC = () => {
       // Recarregar metas
       await fetchGoals();
     } catch (error) {
-      console.error('Erro ao criar meta financeiro:', error);
+      addToast('Erro ao criar meta de economia.', 'error');
     }
   };
 
@@ -70,29 +79,26 @@ export const GoalsWidget: React.FC = () => {
       const newCurrent = goal.current + amountToAdd;
       await api.put(`/goals/${goal.id}`, { current: newCurrent });
 
+      addToast(`Depositado ${formatCurrency(amountToAdd)} na meta!`, 'success');
       setDepositGoalId(null);
       setDepositAmount('');
       await fetchGoals();
     } catch (error) {
-      console.error('Erro ao depositar fundos na meta:', error);
+      addToast('Erro ao depositar fundos.', 'error');
     }
   };
 
-  const handleDeleteGoal = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja excluir esta meta financeira?')) return;
+  const handleDeleteConfirm = async () => {
+    if (!goalToDelete) return;
     try {
-      await api.delete(`/goals/${id}`);
-      setGoals((prev) => prev.filter((g) => g.id !== id));
+      await api.delete(`/goals/${goalToDelete}`);
+      setGoals((prev) => prev.filter((g) => g.id !== goalToDelete));
+      addToast('Meta excluída com sucesso.', 'success');
     } catch (error) {
-      console.error('Erro ao excluir meta:', error);
+      addToast('Erro ao excluir meta.', 'error');
+    } finally {
+      setGoalToDelete(null);
     }
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
   };
 
   const formatDate = (dateString?: string) => {
@@ -101,11 +107,11 @@ export const GoalsWidget: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-white border border-border rounded-3xl p-6 shadow-sm">
+    <div className="flex flex-col bg-card border border-border rounded-[2.5rem] p-6 shadow-premium dark:shadow-premium-dark transition-all duration-300">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <PiggyBank className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-bold font-sans tracking-tight">Metas de Economia</h3>
+          <h3 className="text-lg font-bold tracking-tight text-foreground">Metas de Economia</h3>
         </div>
         {!isAdding && (
           <button
@@ -129,7 +135,7 @@ export const GoalsWidget: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full text-xs bg-white border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors"
+            className="w-full text-xs bg-card border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors text-foreground"
           />
 
           <div className="grid grid-cols-2 gap-2">
@@ -140,7 +146,7 @@ export const GoalsWidget: React.FC = () => {
               value={target}
               onChange={(e) => setTarget(e.target.value)}
               required
-              className="w-full text-xs bg-white border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors"
+              className="w-full text-xs bg-card border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors text-foreground"
             />
             <input
               type="number"
@@ -148,11 +154,11 @@ export const GoalsWidget: React.FC = () => {
               placeholder="Já tenho (R$)"
               value={current}
               onChange={(e) => setCurrent(e.target.value)}
-              className="w-full text-xs bg-white border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors"
+              className="w-full text-xs bg-card border border-border rounded-xl px-3 py-2.5 outline-none focus:border-primary transition-colors text-foreground"
             />
           </div>
 
-          <div className="flex items-center gap-2 bg-white border border-border rounded-xl px-3 py-2">
+          <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 py-2">
             <Calendar className="w-4 h-4 text-muted-foreground" />
             <input
               type="date"
@@ -202,7 +208,7 @@ export const GoalsWidget: React.FC = () => {
             const isCompleted = percentage >= 100;
 
             return (
-              <div key={goal.id} className="flex flex-col border border-border p-3.5 rounded-2xl hover:border-foreground/20 transition-all duration-200">
+              <div key={goal.id} className="flex flex-col border border-border p-3.5 rounded-2xl hover:border-foreground/20 transition-all duration-200 bg-card/50">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex flex-col truncate max-w-[80%]">
                     <span className="font-semibold text-sm text-foreground flex items-center gap-1.5 truncate">
@@ -217,7 +223,7 @@ export const GoalsWidget: React.FC = () => {
                     )}
                   </div>
                   <button
-                    onClick={() => handleDeleteGoal(goal.id)}
+                    onClick={() => setGoalToDelete(goal.id)}
                     className="text-muted-foreground hover:text-red-500 p-1 rounded-lg transition-colors"
                     title="Excluir meta"
                   >
@@ -254,7 +260,7 @@ export const GoalsWidget: React.FC = () => {
                       placeholder="Valor (R$)"
                       value={depositAmount}
                       onChange={(e) => setDepositAmount(e.target.value)}
-                      className="text-xs bg-white border border-border rounded-lg px-2.5 py-1.5 outline-none w-full text-foreground"
+                      className="text-xs bg-card border border-border rounded-lg px-2.5 py-1.5 outline-none w-full text-foreground"
                       autoFocus
                     />
                     <Button
@@ -264,17 +270,15 @@ export const GoalsWidget: React.FC = () => {
                     >
                       Salvar
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
+                    <button
                       onClick={() => {
                         setDepositGoalId(null);
                         setDepositAmount('');
                       }}
-                      className="text-[10px] h-7 rounded-lg px-2"
+                      className="p-1.5 bg-muted text-muted-foreground hover:bg-muted/80 rounded-lg shrink-0"
                     >
-                      X
-                    </Button>
+                      <X className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 ) : (
                   !isCompleted && (
@@ -292,6 +296,17 @@ export const GoalsWidget: React.FC = () => {
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={goalToDelete !== null}
+        onClose={() => setGoalToDelete(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Excluir Meta Financeira"
+        message="Tem certeza que deseja apagar esta meta de economia? Seus registros de progresso acumulados serão perdidos."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        isDestructive={true}
+      />
     </div>
   );
 };

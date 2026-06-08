@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { useTransactions } from '../context/TransactionContext';
+import { formatCurrency } from '../lib/format';
 
 const COLORS = [
   '#3b82f6', // Azul
@@ -12,17 +13,37 @@ const COLORS = [
   '#eab308', // Amarelo
 ];
 
-export const CategoryDistributionChart: React.FC = () => {
+interface CategoryDistributionChartProps {
+  overrideTransactions?: any[];
+  overrideCurrency?: string;
+}
+
+export const CategoryDistributionChart: React.FC<CategoryDistributionChartProps> = ({ 
+  overrideTransactions, 
+  overrideCurrency 
+}) => {
   const { transactions } = useTransactions();
+  const activeTransactions = overrideTransactions || transactions;
+
+  const displayCurrency = !overrideCurrency || overrideCurrency === 'all' 
+    ? (localStorage.getItem('@FinanceApp:currency') || 'BRL') 
+    : overrideCurrency;
 
   const chartData = useMemo(() => {
     // Filtrar apenas despesas
-    const expenses = transactions.filter((t) => t.type === 'expense');
+    const expenses = activeTransactions.filter((t) => t.type === 'expense');
 
     // Agrupar por categoria
     const grouped = expenses.reduce((acc: Record<string, number>, curr) => {
       const category = curr.category || 'Geral';
-      acc[category] = (acc[category] || 0) + curr.amount;
+      const defaultCurrency = localStorage.getItem('@FinanceApp:currency') || 'BRL';
+      const hasDifferentCurrency = curr.currency && curr.currency !== defaultCurrency;
+      
+      const value = (overrideCurrency && overrideCurrency !== 'all' && hasDifferentCurrency && curr.exchangeRate)
+        ? curr.amount / curr.exchangeRate
+        : curr.amount;
+
+      acc[category] = (acc[category] || 0) + value;
       return acc;
     }, {});
 
@@ -35,25 +56,26 @@ export const CategoryDistributionChart: React.FC = () => {
         percentage: total > 0 ? (value / total) * 100 : 0,
       }))
       .sort((a, b) => b.value - a.value); // Ordena pelo maior gasto
-  }, [transactions]);
+  }, [activeTransactions, overrideCurrency]);
 
   const totalExpense = useMemo(() => {
-    return transactions
+    return activeTransactions
       .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
-  }, [transactions]);
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  };
+      .reduce((sum, t) => {
+        const defaultCurrency = localStorage.getItem('@FinanceApp:currency') || 'BRL';
+        const hasDifferentCurrency = t.currency && t.currency !== defaultCurrency;
+        
+        const value = (overrideCurrency && overrideCurrency !== 'all' && hasDifferentCurrency && t.exchangeRate)
+          ? t.amount / t.exchangeRate
+          : t.amount;
+        return sum + value;
+      }, 0);
+  }, [activeTransactions, overrideCurrency]);
 
   if (chartData.length === 0) {
     return (
-      <div className="flex flex-col bg-white border border-border rounded-3xl p-6 h-[340px] justify-center items-center text-center">
-        <h3 className="text-lg font-bold font-sans tracking-tight mb-2">Despesas por Categoria</h3>
+      <div className="flex flex-col bg-card border border-border rounded-[2.5rem] p-6 h-[340px] justify-center items-center text-center">
+        <h3 className="text-lg font-bold font-sans tracking-tight mb-2 text-foreground">Despesas por Categoria</h3>
         <p className="text-sm text-muted-foreground max-w-[200px]">
           Nenhuma despesa registrada para exibir análise de categorias.
         </p>
@@ -62,34 +84,35 @@ export const CategoryDistributionChart: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col bg-white border border-border rounded-3xl p-6 shadow-sm">
-      <h3 className="text-lg font-bold font-sans tracking-tight mb-6">Distribuição de Despesas</h3>
+    <div className="flex flex-col bg-card border border-border rounded-[2.5rem] p-6 shadow-premium dark:shadow-premium-dark transition-all duration-300">
+      <h3 className="text-lg font-bold font-sans tracking-tight mb-6 text-foreground">Distribuição de Despesas</h3>
 
       <div className="relative w-full h-[180px] flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={55}
-              outerRadius={75}
-              paddingAngle={4}
-              dataKey="value"
+               data={chartData}
+               cx="50%"
+               cy="50%"
+               innerRadius={55}
+               outerRadius={75}
+               paddingAngle={4}
+               dataKey="value"
             >
               {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} className="focus:outline-none transition-all duration-300 hover:opacity-80" />
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: any) => formatCurrency(Number(value))}
+              formatter={(value: any) => formatCurrency(Number(value), displayCurrency)}
               contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '16px',
                 fontSize: '12px',
-                fontFamily: 'sans-serif',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                fontFamily: 'Outfit, sans-serif',
+                color: 'var(--foreground)',
+                boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
               }}
             />
           </PieChart>
@@ -99,7 +122,7 @@ export const CategoryDistributionChart: React.FC = () => {
         <div className="absolute flex flex-col items-center justify-center text-center pointer-events-none">
           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Pago</span>
           <span className="text-base font-bold text-foreground font-sans tracking-tight">
-            {formatCurrency(totalExpense)}
+            {formatCurrency(totalExpense, displayCurrency)}
           </span>
         </div>
       </div>
@@ -116,7 +139,7 @@ export const CategoryDistributionChart: React.FC = () => {
               <span className="text-muted-foreground truncate max-w-[120px] font-medium">{item.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-foreground">{formatCurrency(item.value)}</span>
+              <span className="font-semibold text-foreground">{formatCurrency(item.value, displayCurrency)}</span>
               <span className="text-[10px] text-muted-foreground font-mono bg-muted py-0.5 px-1.5 rounded-md">
                 {item.percentage.toFixed(0)}%
               </span>

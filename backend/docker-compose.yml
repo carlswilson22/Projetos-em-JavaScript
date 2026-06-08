@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   api:
     build: .
     container_name: finance_backend
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       # Mapeia a pasta local para dentro do container (atualiza o código em tempo real)
       - .:/app

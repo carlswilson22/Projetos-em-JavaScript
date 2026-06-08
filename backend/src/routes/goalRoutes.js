@@ -59,7 +59,9 @@ router.use(authMiddleware);
  *       500:
  *         description: Erro interno no servidor
  */
-router.post('/', createGoal);
+const { validate, rules } = require('../middlewares/validationMiddleware');
+
+router.post('/', validate(rules.goalCreate), createGoal);
 router.get('/', getGoals);
 
 /**
@@ -130,7 +132,7 @@ router.get('/', getGoals);
  *       500:
  *         description: Erro interno no servidor
  */
-router.put('/:id', updateGoal);
+router.put('/:id', validate(rules.goalUpdate), updateGoal);
 router.delete('/:id', deleteGoal);
 
 module.exports = router;

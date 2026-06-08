@@ -14,4 +14,21 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Interceptor de resposta para redirecionar em caso de token expirado (401)
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('@FinanceApp:user');
+            
+            // Só redireciona se já não estiver na página de login
+            if (!window.location.pathname.includes('/login')) {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;

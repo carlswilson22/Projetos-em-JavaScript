@@ -25,7 +25,8 @@ A aplicação evoluiu de um gerenciador financeiro simples para uma **plataforma
 7.  **Autocompletar Inteligente de Categorias 🧠:** O modal de nova transação autocompleta automaticamente o campo usando as categorias reais cadastradas pelo usuário no banco via API (`api.get('/categories')`), prevenindo erros de digitação e facilitando o uso no dia a dia.
 8.  **CRUD Completo & Cascata (onDelete: Cascade):** Banco de dados SQLite configurado no padrão profissional de integridade relacional via Prisma ORM: deletar um usuário ou meta remove de forma limpa tudo no banco em efeito cascata.
 9.  **API REST Swagger & OpenAPI 3.0:** Documentação completa e interativa de todas as rotas e regras do backend em `/api-docs`.
-10. **Testes de Integração Jest (10/10 PASS):** Cobertura total de testes cobrindo autenticação, perfil, transações, categorias dinâmicas e CRUD/cascata completo de metas.
+10. **Testes de Integração Jest (14/14 PASS):** Cobertura total de testes cobrindo autenticação, perfil, transações, categorias dinâmicas e CRUD/cascata completo de metas.
+11. **Carteiras Multi-Moedas e Câmbio Rápido (BRL, USD, BIT) 💱:** Seções e abas isoladas por moeda no Dashboard (`BRL`, `USD`, `BIT`) com gráficos e listas dinâmicas, integradas com a AwesomeAPI em tempo real para obter cotações, conversor de câmbio rápido automatizado com transações de contrapartida automáticas e cálculo de Patrimônio Consolidado em BRL no topo.
 
 ---
 

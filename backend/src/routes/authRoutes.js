@@ -2,6 +2,7 @@ const express = require('express');
 const routes = express.Router();
 const { register, login, updateProfile } = require('../controllers/authController');
 const authMiddleware = require('../middlewares/authMiddleware');
+const { validate, rules } = require('../middlewares/validationMiddleware');
 
 /**
  * @openapi
@@ -48,7 +49,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *       500:
  *         description: Erro interno no servidor
  */
-routes.post('/register', register);
+routes.post('/register', validate(rules.register), register);
 
 /**
  * @openapi
@@ -91,7 +92,7 @@ routes.post('/register', register);
  *       500:
  *         description: Erro interno no servidor
  */
-routes.post('/login', login);
+routes.post('/login', validate(rules.login), login);
 
 /**
  * @openapi

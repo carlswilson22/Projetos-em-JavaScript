@@ -41,7 +41,7 @@ export const FireSimulator: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-white border border-border rounded-3xl p-6 shadow-sm">
+    <div className="flex flex-col bg-card border border-border rounded-[2.5rem] p-6 shadow-premium dark:shadow-premium-dark transition-all duration-300">
       <div className="flex items-center gap-2 mb-4">
         <Compass className="w-5 h-5 text-primary" />
         <h3 className="text-lg font-bold font-sans tracking-tight text-foreground">Simulador Liberdade (FIRE)</h3>

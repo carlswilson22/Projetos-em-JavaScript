@@ -2,11 +2,15 @@ const prisma = require('../config/db');
 
 const createCategory = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, budget } = req.body;
         const userId = req.user.userId; // Veio do nosso middleware!
 
         const category = await prisma.category.create({
-            data: { name, userId }
+            data: { 
+                name, 
+                budget: budget !== undefined && budget !== null ? Number(budget) : null,
+                userId 
+            }
         });
 
         res.status(201).json(category);
@@ -31,7 +35,7 @@ const getCategories = async (req, res) => {
 const updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, budget } = req.body;
         const userId = req.user.userId;
 
         const category = await prisma.category.findFirst({
@@ -44,7 +48,10 @@ const updateCategory = async (req, res) => {
 
         const updatedCategory = await prisma.category.update({
             where: { id },
-            data: { name }
+            data: { 
+                name: name !== undefined ? name : undefined,
+                budget: budget !== undefined ? (budget === null ? null : Number(budget)) : undefined
+            }
         });
 
         res.status(200).json(updatedCategory);

@@ -69,13 +69,10 @@ router.use(authMiddleware);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Transaction'
- *       401:
- *         description: Token inválido ou não fornecido
- *       500:
- *         description: Erro interno no servidor
  */
-router.post('/', createTransaction);
+const { validate, rules } = require('../middlewares/validationMiddleware');
+
+router.post('/', validate(rules.transactionCreate), createTransaction);
 router.get('/', getTransactions);
 
 /**
@@ -160,7 +157,7 @@ router.get('/', getTransactions);
  *       500:
  *         description: Erro interno no servidor
  */
-router.put('/:id', updateTransaction);
+router.put('/:id', validate(rules.transactionUpdate), updateTransaction);
 router.delete('/:id', deleteTransaction);
 
 module.exports = router;

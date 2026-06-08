@@ -174,4 +174,53 @@ describe('🧪 Testes de Integração da API Financial Control', () => {
         });
         expect(goal).toBeNull();
     });
+
+    test('11. Não deve permitir registrar com e-mail duplicado', async () => {
+        const res = await request(app)
+            .post('/api/auth/register')
+            .send({
+                name: 'Outro Nome',
+                email: testEmail,
+                password: 'outra_senha_123'
+            });
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('error');
+    });
+
+    test('12. Não deve autenticar com senha incorreta', async () => {
+        const res = await request(app)
+            .post('/api/auth/login')
+            .send({
+                email: testEmail,
+                password: 'senha_incorreta_total'
+            });
+
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toHaveProperty('error');
+    });
+
+    test('13. Não deve permitir acesso a rotas protegidas sem token JWT', async () => {
+        const res = await request(app)
+            .get('/api/transactions');
+
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toHaveProperty('message');
+    });
+
+    test('14. Não deve permitir criar transação com valores inválidos (Validação)', async () => {
+        const res = await request(app)
+            .post('/api/transactions')
+            .set('Authorization', `Bearer ${testToken}`)
+            .send({
+                amount: -50.00,
+                description: '',
+                date: new Date().toISOString(),
+                type: 3,
+                categoryId: 'Lazer'
+            });
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('error');
+    });
 });

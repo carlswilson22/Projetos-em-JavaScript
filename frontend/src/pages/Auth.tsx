@@ -47,14 +47,14 @@ export const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] text-foreground p-4">
-      <div className="w-full max-w-md bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:shadow-2xl border border-gray-100 p-8 sm:p-10 transition-all duration-500 overflow-hidden relative">
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4 transition-colors duration-300">
+      <div className="w-full max-w-md bg-card rounded-[2rem] shadow-premium dark:shadow-premium-dark border border-border p-8 sm:p-10 transition-all duration-500 overflow-hidden relative">
         
         <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center mb-6 shadow-md">
+          <div className="w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center mb-6 shadow-md">
              <Wallet className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-center">
+          <h1 className="text-2xl font-bold tracking-tight text-center text-foreground">
             {isLogin ? 'Bem-vindo de volta' : 'Crie sua conta'}
           </h1>
           <p className="text-sm text-muted-foreground mt-2 text-center">
@@ -63,7 +63,7 @@ export const Auth = () => {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50/50 text-red-600 text-sm rounded-2xl border border-red-100 flex items-start gap-3 animate-in slide-in-from-top-2 fade-in duration-300 relative z-10">
+          <div className="mb-6 p-4 bg-destructive/10 text-destructive text-sm rounded-2xl border border-destructive/20 flex items-start gap-3 animate-in slide-in-from-top-2 fade-in duration-300 relative z-10">
             <span className="shrink-0 mt-0.5">⚠️</span>
             <span className="font-medium">{error}</span>
           </div>
@@ -80,7 +80,7 @@ export const Auth = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 border border-gray-200 outline-none rounded-2xl text-sm transition-all focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                  className="w-full pl-11 pr-4 py-3.5 bg-muted/40 border border-border outline-none rounded-2xl text-sm transition-all focus:bg-card focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground"
                   placeholder="Seu nome"
                 />
               </div>
@@ -96,7 +96,7 @@ export const Auth = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 border border-gray-200 outline-none rounded-2xl text-sm transition-all focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                className="w-full pl-11 pr-4 py-3.5 bg-muted/40 border border-border outline-none rounded-2xl text-sm transition-all focus:bg-card focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground"
                 placeholder="seu@email.com"
               />
             </div>
@@ -111,7 +111,7 @@ export const Auth = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-gray-50/50 border border-gray-200 outline-none rounded-2xl text-sm transition-all focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                className="w-full pl-11 pr-4 py-3.5 bg-muted/40 border border-border outline-none rounded-2xl text-sm transition-all focus:bg-card focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground"
                 placeholder="••••••"
               />
             </div>
@@ -120,10 +120,10 @@ export const Auth = () => {
           <button
             type="submit"
             disabled={isSubmitting || isAuthLoading}
-            className="w-full bg-foreground text-background py-4 flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed group rounded-2xl"
+            className="w-full bg-primary text-primary-foreground py-4 flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed group rounded-2xl shadow-md hover:shadow-lg transition-all"
           >
             {isSubmitting ? (
-              <div className="w-5 h-5 border-2 border-background border-t-white/30 rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
                 <span className="font-semibold">{isLogin ? 'Entrar no sistema' : 'Criar conta gratuita'}</span>
