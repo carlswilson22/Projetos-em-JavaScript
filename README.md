@@ -179,4 +179,4 @@ Para aprofundar na engenharia de requisitos do Financial Control, consulte os do
 ## 📝 Licença
 Este projeto é livre e está sob a licença MIT.
 
-Desenvolvido para fins acadêmicos com ☕, 💻 e rigor de Engenharia de Software.
+Desenvolvido para fins acadêmicos com ☕, 💻.
