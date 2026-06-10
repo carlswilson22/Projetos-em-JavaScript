@@ -40,26 +40,29 @@ O sistema adota uma arquitetura em duas camadas principais (**Client-Server**):
 Demonstra a interação do ator (Usuário) com as principais fronteiras operacionais da aplicação:
 
 ```mermaid
-usecaseDiagram
-    actor Usuário as "Usuário Autenticado"
+graph LR
+    %% Ator
+    User["👤 Usuário / Ator"]
 
-    package "Fronteira da Aplicação (Financial Control)" {
-        usecase UC01 as "Cadastrar Novo Usuário"
-        usecase UC02 as "Autenticar-se (Login JWT)"
-        usecase UC03 as "Atualizar Perfil (Nome, E-mail, Foto)"
-        usecase UC04 as "Gerenciar Categorias (CRUD)"
-        usecase UC05 as "Gerenciar Transações (CRUD)"
-        usecase UC06 as "Visualizar Dashboard Financeiro"
-        usecase UC07 as "Consultar Docs Interativos (Swagger)"
-    }
+    %% Fronteira do Sistema
+    subgraph Fronteira ["Fronteira da Aplicação (Financial Control)"]
+        UC01("(UC01) Cadastrar Novo Usuário")
+        UC02("(UC02) Autenticar-se (Login JWT)")
+        UC03("(UC03) Atualizar Perfil (Nome, E-mail, Foto)")
+        UC04("(UC04) Gerenciar Categorias (CRUD)")
+        UC05("(UC05) Gerenciar Transações (CRUD)")
+        UC06("(UC06) Visualizar Dashboard")
+        UC07("(UC07) Consultar Docs (Swagger)")
+    end
 
-    Usuário --> UC01
-    Usuário --> UC02
-    Usuário --> UC03
-    Usuário --> UC04
-    Usuário --> UC05
-    Usuário --> UC06
-    Usuário --> UC07
+    %% Associações
+    User --> UC01
+    User --> UC02
+    User --> UC03
+    User --> UC04
+    User --> UC05
+    User --> UC06
+    User --> UC07
 ```
 
 ---
