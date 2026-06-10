@@ -95,13 +95,13 @@ module.exports = {
             description: [required, minLength(3)],
             date: [required],
             type: [required, isOneOf([0, 1])],
-            currency: [isStringOneOf(['BRL', 'USD', 'EUR'])],
+            currency: [isStringOneOf(['BRL', 'USD', 'EUR', 'BIT'])],
             exchangeRate: [isNumber, isPositive]
         },
         transactionUpdate: {
             amount: [isNumber, isPositive],
             type: [isOneOf([0, 1])],
-            currency: [isStringOneOf(['BRL', 'USD', 'EUR'])],
+            currency: [isStringOneOf(['BRL', 'USD', 'EUR', 'BIT'])],
             exchangeRate: [isNumber, isPositive]
         },
         goalCreate: {

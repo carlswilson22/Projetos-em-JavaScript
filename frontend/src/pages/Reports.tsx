@@ -107,8 +107,8 @@ export function Reports() {
 
   // Cores dinâmicas para o ranking de categorias
   const COLORS = [
-    'hsl(var(--primary))',
-    'hsl(var(--accent))',
+    'var(--primary)',
+    'var(--accent)',
     '#3b82f6',
     '#06b6d4',
     '#10b981'
@@ -213,23 +213,29 @@ export function Reports() {
           <div className="w-full h-80 mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="hsl(var(--border))" opacity={0.4} />
-                <XAxis dataKey="monthName" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10, fontWeight: 500 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
+                <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="var(--border)" opacity={0.4} />
+                <XAxis dataKey="monthName" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontWeight: 500 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 10 }} />
                 <Tooltip 
                   contentStyle={{ 
                     borderRadius: '16px', 
-                    backgroundColor: 'hsl(var(--card))',
-                    borderColor: 'hsl(var(--border))',
+                    backgroundColor: 'var(--card)',
+                    borderColor: 'var(--border)',
                     fontFamily: 'Outfit, sans-serif',
-                    color: 'hsl(var(--foreground))',
+                    color: 'var(--foreground)',
                     fontSize: '12px'
                   }} 
+                  labelStyle={{ color: 'var(--muted-foreground)' }}
+                  itemStyle={{ color: 'var(--foreground)' }}
                   formatter={(value) => [formatCurrency(Number(value))]}
                 />
-                <Legend iconType="circle" wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
-                <Bar dataKey="Receitas" fill="hsl(var(--success))" radius={[8, 8, 0, 0]} maxBarSize={32} />
-                <Bar dataKey="Despesas" fill="hsl(var(--destructive))" radius={[8, 8, 0, 0]} maxBarSize={32} />
+                <Legend 
+                  iconType="circle" 
+                  wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} 
+                  formatter={(value) => <span className="text-foreground font-medium">{value}</span>}
+                />
+                <Bar dataKey="Receitas" fill="var(--success)" radius={[8, 8, 0, 0]} maxBarSize={32} />
+                <Bar dataKey="Despesas" fill="var(--destructive)" radius={[8, 8, 0, 0]} maxBarSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>

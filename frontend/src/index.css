@@ -88,3 +88,15 @@ html.dark, :root.dark, .dark {
   backdrop-filter: blur(12px);
   border: 1px solid var(--border);
 }
+
+/* Visibilidade aprimorada de placeholders em geral */
+::placeholder {
+  color: #64748b !important;
+  opacity: 0.8 !important;
+}
+
+.dark ::placeholder, [class*="dark"] ::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.8 !important;
+}
+

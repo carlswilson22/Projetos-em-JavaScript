@@ -114,6 +114,8 @@ export const CategoryDistributionChart: React.FC<CategoryDistributionChartProps>
                 color: 'var(--foreground)',
                 boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
               }}
+              labelStyle={{ color: 'var(--muted-foreground)' }}
+              itemStyle={{ color: 'var(--foreground)' }}
             />
           </PieChart>
         </ResponsiveContainer>
