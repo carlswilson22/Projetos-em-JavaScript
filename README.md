@@ -1,7 +1,6 @@
 <h1>JavaScript Fundamentals & Resilience</h1>
 
-<h1>O que eu aprendi com cada projeto:</h1>
-<h2>Injeção de dependência, Programação Defensiva, Estruturas de Decisão</h2>
+<h1>O que eu aprendi com cada projeto: Injeção de dependência, Programação Defensiva, Estruturas de Decisão</h1>
 
 <h1>Projeto 1</h1>
 <p1>Código para cobrança de mensalidade</p1>
